@@ -1,0 +1,162 @@
+---
+title: "Trike_vitals_final"
+author: "Maria Godinez"
+date: "February 10, 2022"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readxl)
+trike <- read_excel("~/Data Sets/Data Sets/trike_vitals_2.10.2022.xlsx",sheet = "Infusion TimePoint Vitals")
+EKG <- read_excel("~/Data Sets/Data Sets/trike_vitals_2.10.2022.xlsx",sheet = "EKG")
+
+```
+
+```{r include=FALSE}
+EKG$`Dose (mcg/kg/day CIV)`[EKG$`Dose (mcg/kg/day CIV)` == "5"] <- "5 mcg/kg"
+EKG$`Dose (mcg/kg/day CIV)`[EKG$`Dose (mcg/kg/day CIV)` == "10"] <- "10 mcg/kg"
+EKG$`Dose (mcg/kg/day CIV)`[EKG$`Dose (mcg/kg/day CIV)` == "25"] <- "25 mcg/kg"
+EKG$`Dose (mcg/kg/day CIV)`[EKG$`Dose (mcg/kg/day CIV)` == "50"] <- "50 mcg/kg"
+EKG$`Dose (mcg/kg/day CIV)`[EKG$`Dose (mcg/kg/day CIV)` == "100"] <- "100 mcg/kg"
+EKG$`Dose (mcg/kg/day CIV)`[EKG$`Dose (mcg/kg/day CIV)` == "150"] <- "150 mcg/kg"
+```
+
+```{r echo=FALSE}
+colnames(trike)
+```
+
+
+```{r include=FALSE}
+library(ggplot2)
+library(dplyr)
+```
+
+
+
+
+```{r echo=FALSE, fig.height=6, fig.width=8, warning=FALSE}
+ggplot(trike, aes(x =`Dose (mcg/kg/day CIV)`, y = as.numeric(`Systolic (mmHg)`),group=1))+scale_x_discrete(limits = c("5", "10", "25","50","100","150")) + geom_jitter(alpha = 0.4, color='orange')+ stat_summary(fun.y = "mean", geom = "line",na.rm = TRUE, color='blue')+stat_summary(fun.data = "mean_se", geom = "errorbar", color='forest green', size=1.2,width=.5)+stat_summary(fun.y = "mean", geom = "point",na.rm = TRUE,size=4, color='red')+ggtitle("Systolic Blood Pressue") +
+  xlab("Dose (mcg/kg/day CIV)") + ylab("Systolic (mmHg)")+ theme_minimal()+theme(plot.title = element_text(hjust = 0.5))+theme( axis.line = element_line(colour = "black", size = 1, linetype = "solid"))+scale_y_continuous(breaks=seq(0,210,20))+
+   theme(axis.text.x = element_text(face="bold",
+                           size=12),axis.title.x=element_text(size=16),axis.title.y=element_text(size=16),
+          axis.text.y = element_text(face="bold",  
+                           size=12 ))+theme(plot.title = element_text(size=22))
+
+```
+
+
+
+
+```{r eval=FALSE, include=FALSE}
+trike %>%
+  group_by(Dose=as.factor(`Dose (mcg/kg/day CIV)`))%>%
+  summarise(mean= mean(`Systolic (mmHg)`,na.rm = TRUE),standard_deviation=sd(`Systolic (mmHg)`,na.rm = TRUE))
+```
+
+
+```{r echo=FALSE, fig.height=6, fig.width=8, warning=FALSE}
+ggplot(trike, aes(x =`Dose (mcg/kg/day CIV)` , y = as.numeric(`Temperature`), group=1))+scale_x_discrete(limits = c("5", "10", "25","50","100","150")) + geom_jitter(alpha = 0.4, color='orange',width = .3)+stat_summary(fun.y = "mean", geom = "line",na.rm = TRUE, color='blue')+ stat_summary(fun.data = "mean_se", geom = "errorbar", color='forest green', size=1.1,width=.5)+stat_summary(fun.y = "mean", geom = "point",na.rm = TRUE,size=3.5, color='red')+ggtitle("Body Temperature") +
+  xlab("Dose (mcg/kg/day CIV)") + ylab("Temperature (F)")+ theme_minimal()+theme(plot.title = element_text(hjust = 0.5))+theme( axis.line = element_line(colour = "black", size = 1, linetype = "solid"))+scale_y_continuous(breaks=seq(0,120,1))+
+  theme(axis.text.x = element_text(face="bold",
+                           size=12),axis.title.x=element_text(size=16),axis.title.y=element_text(size=16),
+          axis.text.y = element_text(face="bold",  
+                           size=12 ))+theme(plot.title = element_text(size=22))
+```
+
+```{r eval=FALSE, warning=FALSE, include=FALSE}
+trike %>%
+  group_by(Dose=as.factor(`Dose (mcg/kg/day CIV)`))%>%
+  summarise(mean= mean(`Temperature`,na.rm = TRUE),standard_deviation=sd(as.numeric(`Temperature`),na.rm = TRUE))
+```
+
+
+```{r echo=FALSE, fig.height=6, fig.width=8, warning=FALSE}
+ggplot(trike, aes(x =`Dose (mcg/kg/day CIV)` , y = as.numeric(`O2 Saturation`), group=1))+scale_x_discrete(limits = c("5", "10", "25","50","100","150")) +geom_jitter(alpha = 0.4, color='orange',width = .3)+stat_summary(fun.y = "mean", geom = "line",na.rm = TRUE, color='blue')+stat_summary(fun.data = "mean_se", geom = "errorbar", color='forest green', size=1,width=.5)+stat_summary(fun.y = "mean", geom = "point",na.rm = TRUE,size=3, color='red')+ggtitle("O2 Saturation (%)") +
+  xlab("Dose (mcg/kg/day CIV)") + ylab("O2 Saturation (%)")+ theme_minimal()+theme(plot.title = element_text(hjust = 0.5))+theme( axis.line = element_line(colour = "black", size = 1, linetype = "solid"))+scale_y_continuous(breaks=seq(0,120,2))+
+  theme(axis.text.x = element_text(face="bold",
+                           size=12),axis.title.x=element_text(size=16),axis.title.y=element_text(size=16),
+          axis.text.y = element_text(face="bold",  
+                           size=12 ))+theme(plot.title = element_text(size=22))
+```
+
+```{r include=FALSE}
+trike %>%
+  group_by(Dose=as.factor(`Dose (mcg/kg/day CIV)`))%>%
+  summarise(mean= mean(`O2 Saturation`,na.rm = TRUE),standard_deviation=sd(`O2 Saturation`,na.rm = TRUE), n_obs = n())
+```
+
+```{r echo=FALSE, warning=FALSE}
+ggplot(trike, aes(x =`Dose (mcg/kg/day CIV)` , y = as.numeric(`Diastolic (mmHg)`), group=1))+scale_x_discrete(limits = c("5", "10", "25","50","100","150")) +geom_jitter(alpha = 0.4, color='orange',width = .3)+stat_summary(fun.y = "mean", geom = "line",na.rm = TRUE, color='blue')+stat_summary(fun.data = "mean_se", geom = "errorbar", color='forest green', size=1,width=.5)+stat_summary(fun.y = "mean", geom = "point",na.rm = TRUE,size=3, color='red')+ggtitle("Diastolic Blood Pressure") +
+  xlab("Dose (mcg/kg/day CIV)") + ylab("Diastolic (mmHg)")+ theme_minimal()+theme(plot.title = element_text(hjust = 0.5))+theme( axis.line = element_line(colour = "black", size = 1, linetype = "solid"))+scale_y_continuous(breaks=seq(0,120,10))+
+  theme(axis.text.x = element_text(face="bold",
+                           size=12),axis.title.x=element_text(size=16),axis.title.y=element_text(size=16),
+          axis.text.y = element_text(face="bold",  
+                           size=12 ))+theme(plot.title = element_text(size=22))
+```
+
+
+```{r echo=FALSE, warning=FALSE}
+ggplot(trike, aes(x =`Dose (mcg/kg/day CIV)` , y = as.numeric(`Pulse`), group=1))+scale_x_discrete(limits = c("5", "10", "25","50","100","150")) +geom_jitter(alpha = 0.4, color='orange',width = .3)+stat_summary(fun.y = "mean", geom = "line",na.rm = TRUE, color='blue')+stat_summary(fun.data = "mean_se", geom = "errorbar", color='forest green', size=1,width=.5)+stat_summary(fun.y = "mean", geom = "point",na.rm = TRUE,size=3, color='red')+ggtitle("Pulse") +
+  xlab("Dose (mcg/kg/day CIV)") + ylab("Pulse (Beats/min)")+ theme_minimal()+theme(plot.title = element_text(hjust = 0.5))+theme( axis.line = element_line(colour = "black", size = 1, linetype = "solid"))+scale_y_continuous(breaks=seq(0,140,10))+
+  theme(axis.text.x = element_text(face="bold",
+                           size=12),axis.title.x=element_text(size=16),axis.title.y=element_text(size=16),
+          axis.text.y = element_text(face="bold",  
+                           size=12 ))+theme(plot.title = element_text(size=22))
+```
+
+```{r echo=FALSE, warning=FALSE}
+ggplot(trike, aes(x =`Dose (mcg/kg/day CIV)` , y = as.numeric(`Respiration Rate`), group=1))+scale_x_discrete(limits = c("5", "10", "25","50","100","150")) +geom_jitter(alpha = 0.4, color='orange',width = .3)+stat_summary(fun.y = "mean", geom = "line",na.rm = TRUE, color='blue')+stat_summary(fun.data = "mean_se", geom = "errorbar", color='forest green', size=1,width=.5)+stat_summary(fun.y = "mean", geom = "point",na.rm = TRUE,size=3, color='red')+ggtitle("Respiration Rate") +
+  xlab("Dose (mcg/kg/day CIV)") + ylab("Respiration Rate (breaths/min)")+ theme_minimal()+theme(plot.title = element_text(hjust = 0.5))+theme( axis.line = element_line(colour = "black", size = 1, linetype = "solid"))+scale_y_continuous(breaks=seq(0,30,2))+
+  theme(axis.text.x = element_text(face="bold",
+                           size=12),axis.title.x=element_text(size=16),axis.title.y=element_text(size=16),
+          axis.text.y = element_text(face="bold",  
+                           size=12 ))+theme(plot.title = element_text(size=22))
+```
+## EKG Data Over Time
+
+```{r include=FALSE}
+library(kableExtra)
+library(data.table)
+library(Rmisc)
+library(ggthemes)
+# aggregate the data
+EKG$`Dose (mcg/kg/day CIV)` <- factor(EKG$`Dose (mcg/kg/day CIV)` , levels=c( "5 mcg/kg", "10 mcg/kg", "25 mcg/kg", "50 mcg/kg","100 mcg/kg","150 mcg/kg"))
+EKG$`Day` <- factor(EKG$`Day` , levels=c( "D1", "D2", "D3", "D4","D5","D8","D9","D10","D11","D12","D15","D16","D17","D18","D19"))
+EKG$Dose<-EKG$`Dose (mcg/kg/day CIV)`
+ekg_dose <- summarySE(EKG, measurevar="QTC (msec)", groupvars=c("Day","Dose"))
+ekg_dose
+```
+
+```{r echo=FALSE}
+knitr::kable(ekg_dose, "pipe", caption = "QTC (msec) Grouped by Dose", digits = 2)
+```
+
+```{r echo=FALSE,fig.height=5, fig.width=7.5}
+ggplot(data=ekg_dose, aes(x=Day, y=`QTC (msec)`, group=`Dose`))+
+geom_line(aes(color=`Dose`))+
+geom_point(aes(color=`Dose`))+
+  geom_point(aes(color=`Dose`,shape = `Dose`))+
+   geom_errorbar(aes(ymin=`QTC (msec)`-se, ymax=`QTC (msec)`+se,color=`Dose`), width=.2,
+                 position=position_dodge(0.05))+
+  scale_colour_wsj("colors6")+
+theme_hc()+ ylim(405, 525)
+```
+
+
+
+
+```{r echo=FALSE, fig.height=5, fig.width=7.5}
+
+ggplot(data=ekg_dose, aes(x=Day, y=`QTC (msec)`, group=`Dose`))+
+geom_line(aes(color=`Dose`))+
+geom_point(aes(color=`Dose`,shape = `Dose`))+
+  scale_colour_wsj("colors6")+
+theme_hc()+ ylim(405, 505)
+```
+```
+
+
+
+
+
