@@ -28,9 +28,17 @@ tike_data <- read_excel("TriKE Cytotox Data Summary 7-29-21.xlsx",
 ```{r include=FALSE}
 HL60_20<-subset(tike_data, Analyte=="I20/HL60 E:T 20:1" & (Visit=='Day 1'|Visit=='Day 8'|Visit=='Day 15'|Visit=='Day 22'))
 HL60_20$AnalysisResultFormatted<-as.numeric(HL60_20$AnalysisResultFormatted)
+HL60_20$AnalysisResultFormatted[HL60_20$AnalysisResultFormatted==0.00]
 HL60_20$Visit <- factor(HL60_20$Visit, levels = c("Day 1", "Day 8", "Day 15","Day 22"))
+
+
 ```
 
+
+
+```{r include=FALSE}
+HL60_20$AnalysisResultFormatted[HL60_20$AnalysisResultFormatted==0.00]<-0.15
+```
 
 
 ```{r echo=FALSE,fig.height=5, fig.width=7.5}
@@ -46,9 +54,10 @@ barplot(summary_data,
         args.legend = list(x = "topright",
                            inset = c( .8, 0)),
        beside = TRUE,xlab="Dose Levels (mcg/kg/day CIV)", ylab="Cytotoxicity (%)")
+
 axis(2, seq(0,50,5))
 box(col="grey")
-axis(1,at = c(2,7,13,18,23,28,33,38,43.5,48.1,53),labels = c("5","10","10","25","25","50","50","100","100","150","150"))
+axis(1,at = c(2,7,13,18,23,28,33,38,43.5,48.1,53,58),labels = c("5","5","10","10","25","25","50","50","100","100","150","150"))
 
 abline(h = c(5,10,15,20,25,30,35,40,45), col = "grey", lty = "dotted")
 barplot(summary_data,
@@ -57,6 +66,14 @@ barplot(summary_data,
         args.legend = list(x = "topright",
                            inset = c( 0.8, 0)),
        beside = TRUE, axes=FALSE, add=TRUE,xaxt = "n")
+mtext('‡ assay not performed', side=1, line=4.0, at=10)
+text(2, 1, "‡", adj = c(0,0))
+text(4.3, 1, "‡", adj = c(0,0))
+text(6.7, 1, "‡", adj = c(0,0))
+text(12.1, 1, "‡", adj = c(0,0))
+text(14, 1, "‡", adj = c(0,0))
+text(17.1, 1, "‡", adj = c(0,0))
+text(54.3, 1, "‡", adj = c(0,0))
 
 ```
 
@@ -67,12 +84,14 @@ barplot(summary_data,
 HL60_6<-subset(tike_data, Analyte=="I20/HL60 E:T 6.6:1"& (Visit=='Day 1'|Visit=='Day 8'|Visit=='Day 15'|Visit=='Day 22'))
 HL60_6$Visit<-as.factor(HL60_6$Visit)
 HL60_6$Visit <- factor(HL60_6$Visit, levels = c("Day 1", "Day 8", "Day 15","Day 22"))
+
 ```
 
 
 
 ```{r echo=FALSE,fig.height=5, fig.width=7.5}
 HL60_6$AnalysisResultFormatted<-as.numeric(HL60_6$AnalysisResultFormatted)
+HL60_6$AnalysisResultFormatted[HL60_6$AnalysisResultFormatted==0.00]<-0.15
 summary_data1 <- tapply(HL60_6$AnalysisResultFormatted, list(tp=HL60_6$Visit,cohort = HL60_6$`Patient Number`),FUN = mean, na.rm = TRUE)
 
 barplot(summary_data1,
@@ -86,7 +105,7 @@ barplot(summary_data1,
        beside = TRUE,xlab="Dose Levels (mcg/kg/day CIV)", ylab="Cytotoxicity (%)")
 axis(2, seq(0,41,5))
 box(col="grey")
-axis(1,at = c(2,7,13,18,23,28,33,38,44,48.5,53),labels = c("5","10","10","25","25","50","50","100","100","150","150"))
+axis(1,at = c(2,7,13,18,23,28,33,38,43.5,48.1,53,58),labels = c("5","5","10","10","25","25","50","50","100","100","150","150"))
 
 abline(h = c(5,10,15,20,25,30,35,40,45), col = "grey", lty = "dotted")
 barplot(summary_data1,
@@ -95,6 +114,14 @@ barplot(summary_data1,
         args.legend = list(x = "topright",
                            inset = c( 0.8, 0)),
        beside = TRUE, axes=FALSE, add=TRUE,xaxt = "n")
+mtext('‡ assay not performed', side=1, line=4.0, at=10)
+text(2, 1, "‡", adj = c(0,0))
+text(4.3, 1, "‡", adj = c(0,0))
+text(6.7, 1, "‡", adj = c(0,0))
+text(12.1, 1, "‡", adj = c(0,0))
+text(14, 1, "‡", adj = c(0,0))
+text(17.1, 1, "‡", adj = c(0,0))
+text(54.3, 1, "‡", adj = c(0,0))
 ```
 
 
@@ -109,6 +136,7 @@ HL60_2$Visit <- factor(HL60_2$Visit, levels = c("Day 1", "Day 8", "Day 15","Day 
 ```{r echo=FALSE,fig.height=5, fig.width=7.5}
 
 HL60_2$AnalysisResultFormatted<-as.numeric(HL60_2$AnalysisResultFormatted)
+HL60_2$AnalysisResultFormatted[HL60_2$AnalysisResultFormatted==0.00]<-0.15
 summary_data2 <- tapply(HL60_2$AnalysisResultFormatted, list(tp=HL60_2$Visit,cohort = HL60_2$`Patient Number`),FUN = mean, na.rm = TRUE)
 
 barplot(summary_data2,
@@ -122,7 +150,7 @@ barplot(summary_data2,
        beside = TRUE,xlab="Dose Levels (mcg/kg/day CIV)", ylab="Cytotoxicity (%)")
 axis(2, seq(0,50,5))
 box(col="grey")
-axis(1,at = c(2,7,13,18,23,28,33,38,44,48.5,53),labels = c("5","10","10","25","25","50","50","100","100","150","150"))
+axis(1,at = c(2,7,13,18,23,28,33,38,43.5,48.1,53,58),labels = c("5","5","10","10","25","25","50","50","100","100","150","150"))
 
 abline(h = c(5,10,15,20,25,30,35,40,45), col = "grey", lty = "dotted")
 barplot(summary_data2,
@@ -131,6 +159,14 @@ barplot(summary_data2,
         args.legend = list(x = "topright",
                            inset = c( 0.8, 0)),
        beside = TRUE, axes=FALSE, add=TRUE,xaxt = "n")
+mtext('‡ assay not performed', side=1, line=4.0, at=10)
+text(2, 1, "‡", adj = c(0,0))
+text(4.3, 1, "‡", adj = c(0,0))
+text(6.7, 1, "‡", adj = c(0,0))
+text(12.1, 1, "‡", adj = c(0,0))
+text(14, 1, "‡", adj = c(0,0))
+text(17.1, 1, "‡", adj = c(0,0))
+text(54.3, 1, "‡", adj = c(0,0))
 ```
 
 
@@ -145,6 +181,7 @@ HL60_trike_20$Visit <- factor(HL60_trike_20$Visit, levels = c("Day 1", "Day 8", 
 
 ```{r echo=FALSE,fig.height=5, fig.width=7.5}
 HL60_trike_20$AnalysisResultFormatted<-as.numeric(HL60_trike_20$AnalysisResultFormatted)
+HL60_trike_20$AnalysisResultFormatted[HL60_trike_20$AnalysisResultFormatted==0.00]<-0.15
 summary_data3 <- tapply(HL60_trike_20$AnalysisResultFormatted, list(tp=HL60_trike_20$Visit,cohort = HL60_trike_20$`Patient Number`),FUN = mean, na.rm = TRUE)
 
 barplot(summary_data3,
@@ -158,7 +195,7 @@ barplot(summary_data3,
        beside = TRUE,xlab="Dose Levels (mcg/kg/day CIV)", ylab="Cytotoxicity (%)")
 axis(2, seq(0,90,5))
 box(col="grey")
-axis(1,at = c(2,7,13,18,23,28,33,38,43.3,48.1,53),labels = c("5","10","10","25","25","50","50","100","100","150","150"))
+axis(1,at = c(2,7,13,18,23,28,33,38,43.5,48.1,53,58),labels = c("5","5","10","10","25","25","50","50","100","100","150","150"))
 
 abline(h = c(10,20,30,40,50,60,70,80,90), col = "grey", lty = "dotted")
 barplot(summary_data3,
@@ -167,6 +204,14 @@ barplot(summary_data3,
         args.legend = list(x = "topright",
                            inset = c( 0.8, 0)),
        beside = TRUE, axes=FALSE, add=TRUE,xaxt = "n")
+mtext('‡ assay not performed', side=1, line=4.0, at=10)
+text(2, 1, "‡", adj = c(0,0))
+text(4.3, 1, "‡", adj = c(0,0))
+text(6.7, 1, "‡", adj = c(0,0))
+text(12.1, 1, "‡", adj = c(0,0))
+text(14, 1, "‡", adj = c(0,0))
+text(17.1, 1, "‡", adj = c(0,0))
+text(54.3, 1, "‡", adj = c(0,0))
 ```
 
 
@@ -180,6 +225,8 @@ HL60_trike_6$Visit <- factor(HL60_trike_6$Visit, levels = c("Day 1", "Day 8", "D
 
 ```{r ,echo=FALSE ,fig.height=5, fig.width=7.5}
 HL60_trike_6$AnalysisResultFormatted<-as.numeric(HL60_trike_6$AnalysisResultFormatted)
+HL60_trike_6$AnalysisResultFormatted[HL60_trike_6$AnalysisResultFormatted==0.00]<-0.15
+
 summary_data4 <- tapply(HL60_trike_6$AnalysisResultFormatted, list(tp=HL60_trike_6$Visit,cohort = HL60_trike_6$`Patient Number`),FUN = mean, na.rm = TRUE)
 
 barplot(summary_data4,
@@ -193,7 +240,7 @@ barplot(summary_data4,
        beside = TRUE,xlab="Dose Levels (mcg/kg/day CIV)", ylab="Cytotoxicity (%)")
 box(col = "grey")
 axis(2, seq(0,90,5))
-axis(1,at = c(2,7,13,18,23,28,33,38,43.5,48,53),labels = c("5","10","10","25","25","50","50","100","100","150","150"))
+axis(1,at = c(2,7,13,18,23,28,33,38,43.5,48.1,53,58),labels = c("5","5","10","10","25","25","50","50","100","100","150","150"))
 
 abline(h = c(10,20,30,40,50,60,70,80,90), col = "grey", lty = "dotted")
 barplot(summary_data4,
@@ -202,6 +249,14 @@ barplot(summary_data4,
         args.legend = list(x = "topright",
                            inset = c( 0.8, 0)),
        beside = TRUE, axes=FALSE, add=TRUE,xaxt = "n")
+mtext('‡ assay not performed', side=1, line=4.0, at=10)
+text(2, 1, "‡", adj = c(0,0))
+text(4.3, 1, "‡", adj = c(0,0))
+text(6.7, 1, "‡", adj = c(0,0))
+text(12.1, 1, "‡", adj = c(0,0))
+text(14, 1, "‡", adj = c(0,0))
+text(17.1, 1, "‡", adj = c(0,0))
+text(54.3, 1, "‡", adj = c(0,0))
 ```
 
 
@@ -214,6 +269,8 @@ HL60_trike_2$Visit <- factor(HL60_trike_2$Visit, levels = c("Day 1", "Day 8", "D
 
 ```{r echo=FALSE,fig.height=5, fig.width=7.5}
 HL60_trike_2$AnalysisResultFormatted<-as.numeric(HL60_trike_2$AnalysisResultFormatted)
+HL60_trike_2$AnalysisResultFormatted[HL60_trike_2$AnalysisResultFormatted==0.00]<-0.15
+
 summary_data5 <- tapply(HL60_trike_2$AnalysisResultFormatted, list(tp=HL60_trike_2$Visit,cohort = HL60_trike_2$`Patient Number`),FUN = mean, na.rm = TRUE)
 
 barplot(summary_data5,
@@ -227,7 +284,7 @@ barplot(summary_data5,
        beside = TRUE,xlab="Dose Levels (mcg/kg/day CIV)", ylab="Cytotoxicity (%)")
 axis(2, seq(0,80,5))
 box(col = "grey")
-axis(1,at = c(2,7,13,18,23,28,33,38,43.5,48,53),labels = c("5","10","10","25","25","50","50","100","100","150","150"))
+axis(1,at = c(2,7,13,18,23,28,33,38,43.5,48.1,53,58),labels = c("5","5","10","10","25","25","50","50","100","100","150","150"))
 
 abline(h = c(10,20,30,40,50,60,70,80,90), col = "grey", lty = "dotted")
 barplot(summary_data5,
@@ -236,6 +293,14 @@ barplot(summary_data5,
         args.legend = list(x = "topright",
                            inset = c( 0.8, 0)),
        beside = TRUE, axes=FALSE, add=TRUE,xaxt = "n")
+mtext('‡ assay not performed', side=1, line=4.0, at=10)
+text(2, 1, "‡", adj = c(0,0))
+text(4.3, 1, "‡", adj = c(0,0))
+text(6.7, 1, "‡", adj = c(0,0))
+text(12.1, 1, "‡", adj = c(0,0))
+text(14, 1, "‡", adj = c(0,0))
+text(17.1, 1, "‡", adj = c(0,0))
+text(54.3, 1, "‡", adj = c(0,0))
 ```
 
 
